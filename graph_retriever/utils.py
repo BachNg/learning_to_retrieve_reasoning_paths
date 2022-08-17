@@ -5,6 +5,7 @@ import random
 from tqdm import tqdm
 import glob
 import os
+import gc
 
 import torch
 
@@ -708,6 +709,60 @@ def convert_examples_to_features(examples, max_seq_length, max_para_num, graph_r
 
     logger.info('Done!')
     return features
+
+def load_and_cache_examples(examples, max_seq_length, max_para_num, graph_retriever_config, tokenizer, train = False):
+    input_dir = "."
+    cached_features_file = os.path.join(
+        input_dir,
+        "cached_{}_{}_{}".format(
+            "dev" if not train else "train",
+            "xlmr",
+            str(max_seq_length),
+        ),
+    )
+    root_dir = os.path.join(cached_features_file+"_dir")
+    features_file = os.path.join(root_dir,'features')
+    for i,j in enumerate(range(0, len(examples), 67000)):
+        sub_examples = examples[j:j+67000]
+        features = convert_examples_to_features(sub_examples, max_seq_length, max_para_num, graph_retriever_config, tokenizer, train)
+        if not os.path.exists(os.path.join(features_file)):
+            os.makedirs(os.path.join(features_file))
+        print("Saving features into cached files %s", os.path.join(features_file,'features_'+str(i)))
+        torch.save({"features": features}, os.path.join(features_file,'features_'+str(i)))
+        print("Done")
+        del features
+        gc.collect()
+    return read_saved_data(root_dir,train=train,output_examples= False)
+
+def read_saved_data(input_dir,train=False,output_examples=False):
+    from torch.utils.data import TensorDataset
+    if output_examples:
+        feat="features;datasets;examples"
+    else:
+        feat="datasets"
+    all_features = {"features":[]}
+    all_input_ids = torch.tensor([], dtype=torch.long)
+    all_input_masks = torch.tensor([], dtype=torch.long)
+    all_segment_ids = torch.tensor([], dtype=torch.long)
+    all_output_masks = torch.tensor([], dtype=torch.float)
+    all_num_paragraphs = torch.tensor([], dtype=torch.long)
+    all_num_steps = torch.tensor([], dtype=torch.long)
+    for file_name in os.listdir(os.path.join(input_dir,'features')):
+        data = torch.load(os.path.join(input_dir,'features',file_name))['features']
+        if isinstance(data,TensorDataset):
+            if train:
+                all_input_ids = torch.cat([all_input_ids,data.tensors[0]],dim=0)
+                all_input_masks = torch.cat([all_input_masks,data.tensors[1]],dim=0)
+                all_segment_ids = torch.cat([all_segment_ids,data.tensors[2]],dim=0)
+                all_output_masks = torch.cat([all_output_masks,data.tensors[3]],dim=0)
+                all_num_paragraphs = torch.cat([all_num_paragraphs,data.tensors[4]],dim=0)
+                all_num_steps = torch.cat([all_num_steps,data.tensors[5]],dim=0)
+            else:
+                print('DM wrong')
+        elif isinstance(data,list):
+            all_features['features'] += data
+    all_features["features"] = TensorDataset(all_input_ids,all_input_masks,all_segment_ids,all_output_masks,all_num_paragraphs,all_num_steps)
+    return all_features["features"]
 
 def save(model, output_dir, suffix):
     logger.info('Saving the checkpoint...')

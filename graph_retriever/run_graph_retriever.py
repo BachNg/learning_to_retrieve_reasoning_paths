@@ -261,7 +261,7 @@ def main():
         train_examples = None
         num_train_steps = None
         train_examples = processor.get_train_examples(graph_retriever_config)
-        train_features = convert_examples_to_features(
+        train_features = load_and_cache_examples(
             train_examples, args.max_seq_length, args.max_para_num, graph_retriever_config, tokenizer, train = True)
 
         # len(train_examples) and len(train_features) can be different, depedning on the redundant setting
