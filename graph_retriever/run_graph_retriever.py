@@ -21,6 +21,7 @@ from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from modeling_graph_retriever import BertForGraphRetriever
 from utils import DataProcessor
 from utils import convert_examples_to_features
+from utils import load_and_cache_examples
 from utils import save, load
 from utils import GraphRetrieverConfig
 from utils import warmup_linear
