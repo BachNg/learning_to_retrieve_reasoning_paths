@@ -723,7 +723,7 @@ def load_and_cache_examples(examples, max_seq_length, max_para_num, graph_retrie
     root_dir = os.path.join(cached_features_file+"_dir")
     features_file = os.path.join(root_dir,'features')
     for i,j in enumerate(range(0, len(examples), 3000)):
-        sub_examples = examples[j:j+67000]
+        sub_examples = examples[j:j+3000]
         features = convert_examples_to_features(sub_examples, max_seq_length, max_para_num, graph_retriever_config, tokenizer, train)
         if not os.path.exists(os.path.join(features_file)):
             os.makedirs(os.path.join(features_file))
