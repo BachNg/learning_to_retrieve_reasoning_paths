@@ -764,14 +764,14 @@ def read_saved_data(input_dir,train=False,output_examples=False):
     # all_features["features"] = TensorDataset(all_input_ids,all_input_masks,all_segment_ids,all_output_masks,all_num_paragraphs,all_num_steps)
     return all_features["features"]
 
-def save(model, output_dir, suffix):
+def save(state, output_dir, suffix):
     logger.info('Saving the checkpoint...')
-    model_to_save = model.module if hasattr(model, 'module') else model  # Only save the model it-self
-    output_model_file = os.path.join(output_dir, "pytorch_model_"+suffix+".bin")
+    # model_to_save = model.module if hasattr(model, 'module') else model  # Only save the model it-self
+    output_model_file = os.path.join(output_dir, "pytorch_model_"+suffix+".pt")
 
     status = True
     try:
-        torch.save(model_to_save.state_dict(), output_model_file)
+        torch.save(state, output_model_file)
     except:
         status = False
 
@@ -782,10 +782,16 @@ def save(model, output_dir, suffix):
         
     return status
 
-def load(output_dir, suffix):
-    file_name = 'pytorch_model_' + suffix +'.bin'
+def load(output_dir, suffix, model, optimizer=None, resume=False):
+    file_name = 'pytorch_model_' + suffix +'.pt'
     output_model_file = os.path.join(output_dir, file_name)
-    return torch.load(output_model_file)
+    ckpt = torch.load(output_model_file)
+    model.load_state_dict(ckpt['state_dict'])
+    if resume:
+        optimizer.load_state_dict(ckpt['optimizer'])
+        return model, optimizer, ckpt['epoch']
+    else:
+        return model
 
 def warmup_linear(x, warmup=0.002):
     if x < warmup:

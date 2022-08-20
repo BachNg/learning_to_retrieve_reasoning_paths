@@ -118,6 +118,15 @@ def main():
                         type=str,
                         default=None,
                         help="File path to the training data")
+    parser.add_argument('--resume_training',
+                        type=bool,
+                        default=False,
+                        help="Continue training")
+    parser.add_argument('--saved_epoch',
+                        type=int,
+                        default=None,
+                        help="Saved epoch")
+
     parser.add_argument('--dev_file_path',
                         type=str,
                         default=None,
@@ -246,6 +255,7 @@ def main():
                                                       cache_dir=PYTORCH_PRETRAINED_BERT_CACHE / 'distributed_{}'.format(-1),
                                                       graph_retriever_config = graph_retriever_config)
 
+
         model.to(device)
 
         if n_gpu > 1:
@@ -288,9 +298,13 @@ def main():
         logger.info("  Num examples = %d", len(train_features))
         logger.info("  Batch size = %d", args.train_batch_size)
         logger.info("  Num steps = %d", num_train_steps)
+        epc = 0
+        if args.resume_training:
+            assert args.saved_epoch is not None
+            model, optimizer, epc = load(args.output_dir, args.saved_epoch, model, optimizer, resume=True)
 
         model.train()
-        epc = 0
+
         for _ in range(int(args.num_train_epochs)):
             logger.info('Epoch '+str(epc+1))
             
@@ -397,7 +411,12 @@ def main():
 
                 # Save the model at the half of the epoch
                 if (chunk_index == CHUNK_NUM//2 or save_retry):
-                    status = save(model, args.output_dir, str(epc+0.5))
+                    ckpt= {
+                        'epoch': epc +0.5,
+                        'state_dict': model.state_dict(),
+                        'optimizer': optimizer.state_dict()
+                    }
+                    status = save(ckpt, args.output_dir, str(epc+0.5))
                     save_retry = (not status)
 
                 del all_input_ids
@@ -409,7 +428,12 @@ def main():
                 del train_data
 
             # Save the model at the end of the epoch
-            save(model, args.output_dir, str(epc+1))
+            ckpt= {
+                'epoch': epc +1,
+                'state_dict': model.state_dict(),
+                'optimizer': optimizer.state_dict()
+            }
+            save(ckpt, args.output_dir, str(epc+1))
 
             epc += 1
 
@@ -429,10 +453,13 @@ def main():
     else:
         tfidf_retriever = None
         
-    model_state_dict = load(args.output_dir, args.model_suffix)
 
-    model = BertForGraphRetriever.from_pretrained(args.bert_model, state_dict=model_state_dict, graph_retriever_config = graph_retriever_config)
+
+    model = BertForGraphRetriever.from_pretrained(args.bert_model, graph_retriever_config = graph_retriever_config)
+
     model.to(device)
+
+    model = load(args.output_dir, args.model_suffix, model)
 
     model.eval()
 
