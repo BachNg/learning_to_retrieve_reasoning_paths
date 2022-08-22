@@ -747,7 +747,7 @@ def read_saved_data(input_dir,train=False,output_examples=False):
     all_output_masks = torch.tensor([], dtype=torch.float)
     all_num_paragraphs = torch.tensor([], dtype=torch.long)
     all_num_steps = torch.tensor([], dtype=torch.long)
-    for file_name in os.listdir(os.path.join(input_dir,'features')):
+    for file_name in tqdm(os.listdir(os.path.join(input_dir,'features'))):
         data = torch.load(os.path.join(input_dir,'features',file_name))['features']
         if isinstance(data,TensorDataset):
             if train:

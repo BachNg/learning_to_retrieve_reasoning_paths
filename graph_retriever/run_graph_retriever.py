@@ -22,6 +22,7 @@ from modeling_graph_retriever import BertForGraphRetriever
 from utils import DataProcessor
 from utils import convert_examples_to_features
 from utils import load_and_cache_examples
+from utils import read_saved_data
 from utils import save, load
 from utils import GraphRetrieverConfig
 from utils import warmup_linear
@@ -272,8 +273,20 @@ def main():
         train_examples = None
         num_train_steps = None
         train_examples = processor.get_train_examples(graph_retriever_config)
-        train_features = load_and_cache_examples(
-            train_examples, args.max_seq_length, args.max_para_num, graph_retriever_config, tokenizer, train = True)
+        if args.resume_training:
+            input_dir = "."
+            cached_features_file = os.path.join(
+                input_dir,
+                "cached_{}_{}_{}".format(
+                    "dev" if not do_train else "train",
+                    "xlmr",
+                    str(args.max_seq_length),
+                ),
+            )
+            train_features = read_saved_data(os.path.join(cached_features_file+"_dir"))
+        else:
+            train_features = load_and_cache_examples(
+                train_examples, args.max_seq_length, args.max_para_num, graph_retriever_config, tokenizer, train = True)
 
         # len(train_examples) and len(train_features) can be different, depedning on the redundant setting
         num_train_steps = int(
