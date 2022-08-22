@@ -789,7 +789,13 @@ def load(output_dir, suffix, model, optimizer=None, resume=False):
     model.load_state_dict(ckpt['state_dict'])
     if resume:
         for param_group in ckpt['optimizer']['param_groups']:
-            print(param_group.keys())
+            print(param_group['weight_decay'])
+            print(param_group['lr'])
+            print(param_group['schedule'])
+            print(param_group['b1'])
+            print(param_group['b2'])
+            print(param_group['e'])
+            print(param_group['max_grad_norm'])
         optimizer.load_state_dict(ckpt['optimizer'])
         return model, optimizer, ckpt['epoch']
     else:
