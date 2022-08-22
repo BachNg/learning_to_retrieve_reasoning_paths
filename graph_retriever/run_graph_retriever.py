@@ -208,7 +208,8 @@ def main():
         do_train = True
 
         if os.path.exists(args.output_dir) and os.listdir(args.output_dir):
-            raise ValueError("Output directory ({}) already exists and is not empty.".format(args.output_dir))
+            # raise ValueError("Output directory ({}) already exists and is not empty.".format(args.output_dir))
+            print("Output directory ({}) already exists and is not empty.".format(args.output_dir))
         os.makedirs(args.output_dir, exist_ok=True)
 
     elif args.dev_file_path is not None:
