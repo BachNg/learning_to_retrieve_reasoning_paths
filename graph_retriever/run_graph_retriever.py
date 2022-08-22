@@ -316,11 +316,16 @@ def main():
         if args.resume_training:
             assert args.saved_epoch is not None
             model, optimizer_state, epc = load(args.output_dir, args.saved_epoch, model, optimizer, resume=True)
-            # optimizer = BertAdam(params = optimizer_state['param_groups'][1]['params'],
-            #             lr=optimizer_state['param_groups'][1]['lr'],
-            #             warmup=args.warmup_proportion,
-            #             t_total=t_total,
-            #             max_grad_norm = 1.0)
+            optimizer = BertAdam(params = optimizer_state['param_groups'][1]['params'],
+                        lr=optimizer_state['param_groups'][1]['lr'],
+                        warmup=args.warmup_proportion,
+                        t_total=t_total,
+                        schedule=optimizer_state['param_groups'][1]['schedule'],
+                        b1=optimizer_state['param_groups'][1]['b1'],
+                        b2=optimizer_state['param_groups'][1]['b2'],
+                        e=optimizer_state['param_groups'][1]['e'],
+                        weight_decay=optimizer_state['param_groups'][1]['weight_decay'],
+                        max_grad_norm = optimizer_state['param_groups'][1]['max_grad_norm'])
 
         model.train()
 
