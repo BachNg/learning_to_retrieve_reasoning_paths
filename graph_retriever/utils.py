@@ -788,8 +788,8 @@ def load(output_dir, suffix, model, optimizer=None, resume=False):
     ckpt = torch.load(output_model_file)
     model.load_state_dict(ckpt['state_dict'])
     if resume:
-        print(optimizer.load_state_dict(ckpt['optimizer']))
-        optimizer = optimizer.load_state_dict(ckpt['optimizer'])
+        print('cccc', ckpt['optimizer'])
+        optimizer.load_state_dict(ckpt['optimizer'])
         return model, optimizer, ckpt['epoch']
     else:
         return model
