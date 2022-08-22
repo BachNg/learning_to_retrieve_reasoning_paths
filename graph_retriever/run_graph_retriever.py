@@ -315,7 +315,7 @@ def main():
         epc = 0
         if args.resume_training:
             assert args.saved_epoch is not None
-            model, optimizer, epc = load(args.output_dir, args.saved_epoch, model, optimizer, resume=True)
+            model, _, epc = load(args.output_dir, args.saved_epoch, model, optimizer, resume=True)
             # optimizer = BertAdam(params = optimizer_state['param_groups'][1]['params'],
             #             lr=optimizer_state['param_groups'][1]['lr'],
             #             warmup=args.warmup_proportion,
@@ -438,7 +438,7 @@ def main():
                     ckpt= {
                         'epoch': epc +0.5,
                         'state_dict': model.state_dict(),
-                        'optimizer': optimizer.state_dict()
+                        'optimizer': optimizer
                     }
                     status = save(ckpt, args.output_dir, str(epc+0.5))
                     save_retry = (not status)
@@ -455,7 +455,7 @@ def main():
             ckpt= {
                 'epoch': epc +1,
                 'state_dict': model.state_dict(),
-                'optimizer': optimizer.state_dict()
+                'optimizer': optimizer
             }
             save(ckpt, args.output_dir, str(epc+1))
 
