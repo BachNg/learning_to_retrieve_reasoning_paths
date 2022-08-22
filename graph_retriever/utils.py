@@ -786,9 +786,9 @@ def load(output_dir, suffix, model, optimizer=None, resume=False):
     file_name = 'pytorch_model_' + str(suffix) +'.pt'
     output_model_file = os.path.join(output_dir, file_name)
     ckpt = torch.load(output_model_file)
-    model.load_state_dict(ckpt['state_dict'])
+    model = model.load_state_dict(ckpt['state_dict'])
     if resume:
-        optimizer.load_state_dict(ckpt['optimizer'])
+        optimizer = optimizer.load_state_dict(ckpt['optimizer'])
         return model, optimizer, ckpt['epoch']
     else:
         return model
