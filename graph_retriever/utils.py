@@ -792,7 +792,8 @@ def load(output_dir, suffix, model, optimizer=None, resume=False):
         # for param_group in ckpt['optimizer']['param_groups']:
         #     print(param_group['params'])
         # optimizer.load_state_dict(ckpt['optimizer'])
-        return model, optimizer, ckpt['epoch']
+        optimizer_saved = ckpt['optimizer']
+        return model, optimizer_saved, ckpt['epoch']
     else:
         return model
 
