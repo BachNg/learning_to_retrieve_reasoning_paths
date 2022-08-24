@@ -207,8 +207,8 @@ class GraphRetriever:
 
         TOTAL_NUM = len(eval_examples)
         # print(eval_examples[0].keys())
-        print(eval_examples[0].question)
-        print(eval_examples[0].context)
+        # print(eval_examples[0].question)
+        # print(eval_examples[0].context)
         eval_start_index = 0
         
         while eval_start_index < TOTAL_NUM:
@@ -230,7 +230,7 @@ class GraphRetriever:
             eval_dataloader = DataLoader(eval_data, sampler=eval_sampler, batch_size=args.eval_batch_size)
             logger.info('Examples from '+str(eval_start_index)+' to '+str(eval_end_index))
             for input_ids, input_masks, segment_ids, output_masks, num_paragraphs, num_steps, ex_indices in tqdm(eval_dataloader, desc="Evaluating"):
-                print('VVsssVVV', np.shape(input_masks))
+                # print('VVsssVVV', np.shape(input_masks))
                 batch_max_len = input_masks.sum(dim = 2).max().item()
                 batch_max_para_num = num_paragraphs.max().item()
                 batch_max_steps = num_steps.max().item()

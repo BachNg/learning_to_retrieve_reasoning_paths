@@ -301,7 +301,8 @@ class ODQAEval:
                     open(self.args.saved_tfidf_retrieval_outputs_path))
             else:
                 tfidf_retrieval_output = self.retrieve(eval_questions)
-                
+            
+            save_tfidf = torch.save({"tdidf": tfidf_retrieval_output}, '/content/tfidf_retrieval_output.pt')
             selector_output = self.select(tfidf_retrieval_output)
         
         # read and extract answers from reasoning paths

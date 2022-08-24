@@ -605,7 +605,7 @@ def convert_examples_to_features(examples, max_seq_length, max_para_num, graph_r
         input_masks += padding
         segment_ids += padding
 
-        print('VVVVVVVxxxx',np.shape(input_masks))
+        # print('VVVVVVVxxxx',np.shape(input_masks))
         features.append(
                 InputFeatures(input_ids=input_ids,
                               input_masks=input_masks,
