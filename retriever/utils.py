@@ -208,8 +208,8 @@ def get_field(d, field_list):
 
 
 def load_para_collections_from_tfidf_id_intro_only(tfidf_id, db):
-    if "_0" not in tfidf_id:
-        tfidf_id = "{0}_0".format(tfidf_id)
+    # if "_0" not in tfidf_id:
+    #     tfidf_id = "{0}_0".format(tfidf_id)
     if db.get_doc_text(tfidf_id) is None:
         logger.warning("{0} is missing".format(tfidf_id))
         return []
