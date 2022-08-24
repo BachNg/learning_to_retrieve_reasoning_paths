@@ -298,6 +298,7 @@ class ODQAEval:
         else:
             if self.args.saved_tfidf_retrieval_outputs_path:
                 tfidf_retrieval_output = torch.load(self.args.saved_tfidf_retrieval_outputs_path)['tdidf']
+                tfidf_retrieval_output = json.load(tfidf_retrieval_output)
             else:
                 tfidf_retrieval_output = self.retrieve(eval_questions)
             
