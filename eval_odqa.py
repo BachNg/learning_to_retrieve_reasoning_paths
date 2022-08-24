@@ -2,6 +2,7 @@ import argparse
 import torch
 import json
 from tqdm import tqdm
+import pickle
 
 from pipeline.tfidf_retriever import TfidfRetriever
 from pipeline.graph_retriever import GraphRetriever
@@ -297,11 +298,12 @@ class ODQAEval:
                 open(self.args.saved_selector_outputs_path))
         else:
             if self.args.saved_tfidf_retrieval_outputs_path:
-                tfidf_retrieval_output = torch.load(self.args.saved_tfidf_retrieval_outputs_path)['tdidf']
-                tfidf_retrieval_output = json.load(tfidf_retrieval_output)
+                # tfidf_retrieval_output = torch.load(self.args.saved_tfidf_retrieval_outputs_path)['tdidf']
+                tfidf_retrieval_output = json.load(open(self.args.saved_tfidf_retrieval_outputs_path, 'rb'))
             else:
                 tfidf_retrieval_output = self.retrieve(eval_questions)
-            
+                with open('/content/tfidf_retrieval_output.pkl', 'wb') as f:
+                    pickle.dump(tfidf_retrieval_output, f)
             # save_tfidf = torch.save({"tdidf": tfidf_retrieval_output}, '/content/tfidf_retrieval_output.pt')
             selector_output = self.select(tfidf_retrieval_output)
         
