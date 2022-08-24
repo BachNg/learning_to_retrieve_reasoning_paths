@@ -3,6 +3,8 @@ from tqdm import tqdm
 
 import torch
 
+import numpy as np
+
 from graph_retriever.utils import InputExample
 from graph_retriever.utils import InputFeatures
 from graph_retriever.utils import tokenize_question
@@ -228,7 +230,7 @@ class GraphRetriever:
             eval_dataloader = DataLoader(eval_data, sampler=eval_sampler, batch_size=args.eval_batch_size)
             logger.info('Examples from '+str(eval_start_index)+' to '+str(eval_end_index))
             for input_ids, input_masks, segment_ids, output_masks, num_paragraphs, num_steps, ex_indices in tqdm(eval_dataloader, desc="Evaluating"):
-
+                print('VVsssVVV', np.shape(input_masks))
                 batch_max_len = input_masks.sum(dim = 2).max().item()
                 batch_max_para_num = num_paragraphs.max().item()
                 batch_max_steps = num_steps.max().item()
