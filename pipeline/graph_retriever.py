@@ -204,7 +204,9 @@ class GraphRetriever:
         eval_examples = create_examples(tfidf_retrieval_output, self.graph_retriever_config)
 
         TOTAL_NUM = len(eval_examples)
-        print(eval_examples[0])
+        print(eval_examples[0].keys())
+        print(eval_examples[0].question)
+        print(eval_examples[0].context)
         eval_start_index = 0
         
         while eval_start_index < TOTAL_NUM:
