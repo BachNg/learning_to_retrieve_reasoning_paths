@@ -299,7 +299,9 @@ class ODQAEval:
         else:
             if self.args.saved_tfidf_retrieval_outputs_path:
                 # tfidf_retrieval_output = torch.load(self.args.saved_tfidf_retrieval_outputs_path)['tdidf']
-                tfidf_retrieval_output = json.load(open(self.args.saved_tfidf_retrieval_outputs_path, 'rb'))
+                with open(self.args.saved_tfidf_retrieval_outputs_path, "rb") as input_file:
+                    e = pickle.load(input_file)
+                tfidf_retrieval_output = json.load(e)
             else:
                 tfidf_retrieval_output = self.retrieve(eval_questions)
                 with open('/content/tfidf_retrieval_output.pkl', 'wb') as f:
