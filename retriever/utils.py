@@ -230,8 +230,8 @@ def load_para_and_linked_titles_dict_from_tfidf_id(tfidf_id, db):
     This method is mainly for Natural Questions Open benchmark.
     """
     # will be fixed in the later version; current tfidf weights use indexed titles as keys.
-    if "_0" not in tfidf_id:
-        tfidf_id = "{0}_0".format(tfidf_id)
+    # if "_0" not in tfidf_id:
+    #     tfidf_id = "{0}_0".format(tfidf_id)
     paras, linked_titles = db.get_doc_text_hyper_linked_titles_for_articles(
         tfidf_id)
     if len(paras) == 0:
