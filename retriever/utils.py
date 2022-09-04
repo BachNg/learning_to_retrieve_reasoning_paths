@@ -54,8 +54,8 @@ def process_jsonlines(filename):
     """
     # item should be nested list
     extracted_items = []
-    files  = [line for line in bz2.open(filename, 'rt')]
-    with jsonlines.Reader(files) as reader:
+    # files  = [line for line in bz2.open(filename, 'rt')]
+    with jsonlines.open(filename) as reader:
         for obj in reader:
             wiki_id = obj["id"]
             title = obj["title"]
