@@ -107,7 +107,7 @@ def store_contents(wiki_dir, save_path, preprocess, num_workers=None, hotpotqa_f
         num_workers: Number of parallel processes to use when reading docs.
     """
     filenames = [f for f in glob.glob(
-        wiki_dir + "/*/wiki_*", recursive=True) if ".bz2" not in f]
+        wiki_dir + "/*/wiki_*", recursive=True) if ".bz2" in f]
     if os.path.isfile(save_path):
         raise RuntimeError('%s already exists! Not overwriting.' % save_path)
 
