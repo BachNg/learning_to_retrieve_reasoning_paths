@@ -6,6 +6,7 @@ import regex
 import numpy as np
 import scipy.sparse as sp
 from sklearn.utils import murmurhash3_32
+import bz2
 
 import logging
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
@@ -53,12 +54,14 @@ def process_jsonlines(filename):
     """
     # item should be nested list
     extracted_items = []
-    with jsonlines.open(filename) as reader:
+    files  = [line for line in bz2.open(filename, 'rt')]
+    with jsonlines.Reader(files) as reader:
         for obj in reader:
             wiki_id = obj["id"]
             title = obj["title"]
             title_id = make_wiki_id(title, 0)
-            text_with_links = obj["text"]
+            text_with_links = "".join(obj["text"])
+
 
             hyper_linked_titles_text = ""
             # When we consider the whole article as a document unit (e.g., SQuAD Open, Natural Questions Open)
