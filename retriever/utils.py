@@ -60,12 +60,14 @@ def process_jsonlines(filename):
             wiki_id = obj["id"]
             title = obj["title"]
             title_id = make_wiki_id(title, 0)
-            # print(obj["text"])
-            all_para = []
-            for para in obj["text"]:
-                all_para.append("".join(para))
-            text_with_links = "\n".join(all_para)
+            text_with_links = obj["text"]
 
+            # #Code for read origin processed wiki dump
+            # all_para = []
+            # for para in obj["text"]:
+            #     all_para.append("".join(para))
+            # text_with_links = "\n".join(all_para)
+            
 
             hyper_linked_titles_text = ""
             # When we consider the whole article as a document unit (e.g., SQuAD Open, Natural Questions Open)
