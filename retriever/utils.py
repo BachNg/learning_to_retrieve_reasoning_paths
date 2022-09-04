@@ -59,6 +59,7 @@ def process_jsonlines(filename):
         for obj in reader:
             wiki_id = obj["id"]
             title = obj["title"]
+            title_id = title
             ##Uncomment to add _0 to title like original code:
             # title_id = make_wiki_id(title, 0)
 
