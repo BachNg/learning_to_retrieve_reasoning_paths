@@ -6,7 +6,6 @@ import regex
 import numpy as np
 import scipy.sparse as sp
 from sklearn.utils import murmurhash3_32
-import bz2
 
 import logging
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
@@ -54,8 +53,7 @@ def process_jsonlines(filename):
     """
     # item should be nested list
     extracted_items = []
-    files  = [line for line in bz2.open(filename, 'rt')]
-    with jsonlines.Reader(files) as reader:
+    with jsonlines.open(filename) as reader:
         for obj in reader:
             wiki_id = obj["id"]
             title = obj["title"]
