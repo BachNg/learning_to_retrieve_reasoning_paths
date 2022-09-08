@@ -139,7 +139,7 @@ def get_count_matrix(args, db, db_opts):
     )
 
     # Compute the count matrix in steps (to keep in memory)
-    logger.info('Mapping...')
+    logger.info('Mappingg...')
     row, col, data = [], [], []
     step = max(int(len(doc_ids) / 10), 1)
     batches = [doc_ids[i:i + step] for i in range(0, len(doc_ids), step)]
@@ -153,9 +153,9 @@ def get_count_matrix(args, db, db_opts):
             data.extend(b_data)
     workers.close()
     workers.join()
-    pickle.dump(open('/content/drive/MyDrive/row.pkl','wb'), row)
-    pickle.dump(open('/content/drive/MyDrive/col.pkl','wb'), col)
-    pickle.dump(open('/content/drive/MyDrive/data.pkl','wb'), data)
+    pickle.dump(row, open('/content/drive/MyDrive/row.pkl','wb'))
+    pickle.dump(col, open('/content/drive/MyDrive/col.pkl','wb'))
+    pickle.dump(data, open('/content/drive/MyDrive/data.pkl','wb'))
     logger.info('Creating sparse matrix...')
     count_matrix = sp.csr_matrix(
         (data, (row, col)), shape=(args.hash_size, len(doc_ids))
