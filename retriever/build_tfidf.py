@@ -8,6 +8,7 @@ import argparse
 import os
 import math
 import logging
+import pickle
 
 from multiprocessing import Pool as ProcessPool
 from multiprocessing.util import Finalize
@@ -152,7 +153,9 @@ def get_count_matrix(args, db, db_opts):
             data.extend(b_data)
     workers.close()
     workers.join()
-
+    pickle.dump(open('/content/drive/MyDrive/row.pkl','wb'), row)
+    pickle.dump(open('/content/drive/MyDrive/col.pkl','wb'), col)
+    pickle.dump(open('/content/drive/MyDrive/data.pkl','wb'), data)
     logger.info('Creating sparse matrix...')
     count_matrix = sp.csr_matrix(
         (data, (row, col)), shape=(args.hash_size, len(doc_ids))
