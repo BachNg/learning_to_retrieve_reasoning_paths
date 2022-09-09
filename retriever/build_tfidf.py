@@ -140,22 +140,27 @@ def get_count_matrix(args, db, db_opts):
 
     # Compute the count matrix in steps (to keep in memory)
     logger.info('Mappingg...')
-    row, col, data = [], [], []
-    step = max(int(len(doc_ids) / 10), 1)
-    batches = [doc_ids[i:i + step] for i in range(0, len(doc_ids), step)]
-    _count = partial(count, args.ngram, args.hash_size, args.multi_para)
-    for i, batch in enumerate(batches):
-        logger.info('-' * 25 + 'Batch %d/%d' %
-                    (i + 1, len(batches)) + '-' * 25)
-        for b_row, b_col, b_data in workers.imap_unordered(_count, batch):
-            row.extend(b_row)
-            col.extend(b_col)
-            data.extend(b_data)
-    workers.close()
-    workers.join()
-    pickle.dump(row, open('/content/drive/MyDrive/row.pkl','wb'))
-    pickle.dump(col, open('/content/drive/MyDrive/col.pkl','wb'))
-    pickle.dump(data, open('/content/drive/MyDrive/data.pkl','wb'))
+    if args.resuming_count:
+        row = pickle.load(open('/content/drive/MyDrive/row.pkl','rb'))
+        col = pickle.load(open('/content/drive/MyDrive/col.pkl','rb'))
+        data = pickle.load(open('/content/drive/MyDrive/data.pkl','rb'))
+    else:
+        row, col, data = [], [], []
+        step = max(int(len(doc_ids) / 10), 1)
+        batches = [doc_ids[i:i + step] for i in range(0, len(doc_ids), step)]
+        _count = partial(count, args.ngram, args.hash_size, args.multi_para)
+        for i, batch in enumerate(batches):
+            logger.info('-' * 25 + 'Batch %d/%d' %
+                        (i + 1, len(batches)) + '-' * 25)
+            for b_row, b_col, b_data in workers.imap_unordered(_count, batch):
+                row.extend(b_row)
+                col.extend(b_col)
+                data.extend(b_data)
+        workers.close()
+        workers.join()
+        pickle.dump(row, open('/content/drive/MyDrive/row.pkl','wb'))
+        pickle.dump(col, open('/content/drive/MyDrive/col.pkl','wb'))
+        pickle.dump(data, open('/content/drive/MyDrive/data.pkl','wb'))
     logger.info('Creating sparse matrix...')
     count_matrix = sp.csr_matrix(
         (data, (row, col)), shape=(args.hash_size, len(doc_ids))
@@ -216,6 +221,8 @@ if __name__ == '__main__':
                         help='Number of CPU processes (for tokenizing, etc)')
     parser.add_argument('--multi_para', action='store_true',
                         help='set true if the db contains multiple paragraphs, not intro-paragraph only.')
+    parser.add_argument('--resuming_count', type=bool, default= False,
+                        help='skip counting matrix')
     args = parser.parse_args()
 
     logging.info('Counting words...')
