@@ -161,9 +161,9 @@ def get_count_matrix(args, db, db_opts):
                 data.extend(b_data)
         workers.close()
         workers.join()
-        pickle.dump(row, open('/content/drive/MyDrive/row.pkl','wb'))
-        pickle.dump(col, open('/content/drive/MyDrive/col.pkl','wb'))
-        pickle.dump(data, open('/content/drive/MyDrive/data.pkl','wb'))
+        # pickle.dump(row, open('/content/drive/MyDrive/row.pkl','wb'))
+        # pickle.dump(col, open('/content/drive/MyDrive/col.pkl','wb'))
+        # pickle.dump(data, open('/content/drive/MyDrive/data.pkl','wb'))
     logger.info('Creating sparse matrix...')
     count_matrix = sp.csr_matrix(
         (data, (row, col)), shape=(args.hash_size, len(doc_ids))
