@@ -141,9 +141,12 @@ def get_count_matrix(args, db, db_opts):
     # Compute the count matrix in steps (to keep in memory)
     logger.info('Mappingg...')
     if args.resuming_count:
-        row = pickle.load(open('/content/drive/MyDrive/row.pkl','rb'))
-        col = pickle.load(open('/content/drive/MyDrive/col.pkl','rb'))
-        data = pickle.load(open('/content/drive/MyDrive/data.pkl','rb'))
+        data = np.memmap('/content/drive/MyDrive/data.npz', mode="r", dtype=np.float32, shape=(240215390,))
+        row  = np.memmap('/content/drive/MyDrive/row.npz', mode="r", dtype=np.float32, shape=(240215390,))
+        col =  np.memmap('/content/drive/MyDrive/col.npz', mode="r", dtype=np.float32, shape=(240215390,))
+        # row = pickle.load(open('/content/drive/MyDrive/row.pkl','rb'))
+        # col = pickle.load(open('/content/drive/MyDrive/col.pkl','rb'))
+        # data = pickle.load(open('/content/drive/MyDrive/data.pkl','rb'))
     else:
         row, col, data = [], [], []
         step = max(int(len(doc_ids) / 10), 1)
