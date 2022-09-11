@@ -364,7 +364,7 @@ def main():
                 logger.info('Examples from '+str(train_start_index)+' to '+str(train_end_index))
                 for step, batch in enumerate(tqdm(train_dataloader, desc="Iteration")):
                     input_masks = batch[1]
-                    print('VVVVVVV', np.shape(input_masks))
+                    # print('VVVVVVV', np.shape(input_masks))
                     batch_max_len = input_masks.sum(dim = 2).max().item()
 
                     num_paragraphs = batch[4]
