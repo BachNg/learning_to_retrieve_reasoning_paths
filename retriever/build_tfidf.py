@@ -18,7 +18,7 @@ from collections import Counter
 try:
     from retriever.tfidf_doc_ranker import TfidfDocRanker
     from retriever.doc_db import DocDB
-    from retriever.tokenizers import SimpleTokenizer
+    from retriever.tokenizers import SimpleTokenizer, SpacyTokenizer
     from retriever.utils import filter_ngram, hash, save_sparse_csr
 except: 
     from tfidf_doc_ranker import TfidfDocRanker
@@ -131,7 +131,10 @@ def get_count_matrix(args, db, db_opts):
 
     # Setup worker pool
     # TODO: Add tokenizer's choice.
-    tok_class = SimpleTokenizer
+    if args.language == 'vi':
+        tok_class = SpacyTokenizer
+    else:
+        tok_class = SimpleTokenizer
     workers = ProcessPool(
         args.num_workers,
         initializer=init,
@@ -226,6 +229,8 @@ if __name__ == '__main__':
                         help='set true if the db contains multiple paragraphs, not intro-paragraph only.')
     parser.add_argument('--resuming_count', type=bool, default= False,
                         help='skip counting matrix')
+    parser.add_argument('--language', type=str, default= 'vi',
+                        help='Tokenizer for vietnamese')
     args = parser.parse_args()
 
     logging.info('Counting words...')
