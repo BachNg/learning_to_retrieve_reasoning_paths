@@ -23,7 +23,7 @@ try:
 except: 
     from tfidf_doc_ranker import TfidfDocRanker
     from doc_db import DocDB
-    from tokenizers import SimpleTokenizer
+    from tokenizers import SimpleTokenizer, SpacyTokenizer
     from utils import filter_ngram, hash, save_sparse_csr
     
 logger = logging.getLogger()
