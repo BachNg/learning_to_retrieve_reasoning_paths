@@ -91,8 +91,7 @@ class Reader:
             max_query_length=args.max_query_length,
             is_training=False,
             quiet = True)
-        for f in features:
-            print(f.input_ids)
+
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_masks = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
@@ -115,6 +114,8 @@ class Reader:
                 start_logits = batch_start_logits[i].detach().cpu().tolist()
                 end_logits = batch_end_logits[i].detach().cpu().tolist()
                 switch_logits = batch_switch_logits[i].detach().cpu().tolist()
+                print('aaaaaaaaaaaaaaa', start_logits)
+                print('bbbbbbbbbbb', end_logits)
                 print('sssssssss', switch_logits)
                 eval_feature = features[f_offset+i]
                 unique_id = int(features[f_offset+i].unique_id)
