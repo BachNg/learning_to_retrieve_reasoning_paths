@@ -1016,7 +1016,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
             reverse=True)
-
+        print('CCCCCCCCCCCC', prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
         no_answer_logit = result.switch_logits[1]
