@@ -76,6 +76,8 @@ class Reader:
 
         squad_style_data = self.convert_retriever_output(retriever_output)
 
+        print("CCCCCCCCCCCCCCCCSSSSSSSSSSSSSSS",squad_style_data)
+
         e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
                                              is_training=False,
                                              version_2_with_negative=False,
