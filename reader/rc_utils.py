@@ -269,6 +269,8 @@ def convert_examples_to_features(examples, tokenizer, max_seq_length,
             if start_offset + length == len(all_doc_tokens):
                 break
             start_offset += min(length, doc_stride)
+        
+        print('AAAAAAAAAAAAAAAAAAAAAA', doc_spans)
 
         for (doc_span_index, doc_span) in enumerate(doc_spans):
             tokens = []
