@@ -158,7 +158,13 @@ class Reader:
                 0.0,
                 self.tokenizer,
             )
-        return predictions, {}
+        return write_predictions_yes_no_beam(e, dev_features, all_results,
+                                             args.n_best_size, args.max_answer_length,
+                                             args.do_lower_case, None,
+                                             None, None, False,
+                                             False, None,
+                                             output_selected_paras=True,
+                                             quiet = True)
 
     def predict(self,
                 retriever_output,
