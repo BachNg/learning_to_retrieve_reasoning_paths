@@ -79,7 +79,12 @@ class Reader:
                 args):
         squad_style_data = self.convert_retriever_output(retriever_output)
         tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-large")
-        dev_features, dev_dataset = squad_convert_examples_to_features(squad_style_data, 
+
+        e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
+                                             is_training=False,
+                                             version_2_with_negative=False,
+                                             store_path_prob=False)
+        dev_features, dev_dataset = squad_convert_examples_to_features(e, 
                                                        tokenizer, 
                                                        max_seq_length = 378, 
                                                        doc_stride = 128,
