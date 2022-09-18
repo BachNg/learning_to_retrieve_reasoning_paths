@@ -82,7 +82,7 @@ class Reader:
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
-        print("KKKKKKKKKKKKKKFFFFFFFFFFFFFFFFFF",e)
+        # print("KKKKKKKKKKKKKKFFFFFFFFFFFFFFFFFF",e)
         features = convert_examples_to_features(
             examples=e,
             tokenizer=self.tokenizer,
@@ -91,7 +91,7 @@ class Reader:
             max_query_length=args.max_query_length,
             is_training=False,
             quiet = True)
-        print('jjjjjjjjjjjjjddddddddddddd', features)
+
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_masks = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
@@ -121,7 +121,7 @@ class Reader:
                                              end_logits=end_logits,
                                              switch_logits=switch_logits))
             f_offset += input_ids.size(0)
-        print('dddddddddddddssssssssssss', all_results)    
+            
         return write_predictions_yes_no_beam(e, features, all_results,
                                              args.n_best_size, args.max_answer_length,
                                              args.do_lower_case, None,
