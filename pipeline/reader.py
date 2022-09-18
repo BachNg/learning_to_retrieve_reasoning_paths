@@ -24,8 +24,10 @@ class Reader:
                  device):
 
         print('initializing Reader...', flush=True)
-        self.model = BertForQuestionAnsweringConfidence.from_pretrained(args.reader_path,  num_labels=4, no_masking=True)
-        self.tokenizer = BertTokenizer.from_pretrained(args.reader_path, args.do_lower_case)
+        # self.model = BertForQuestionAnsweringConfidence.from_pretrained(args.reader_path,  num_labels=4, no_masking=True)
+        # self.tokenizer = BertTokenizer.from_pretrained(args.reader_path, args.do_lower_case)
+        self.model = XLMRobertaForQuestionAnswering.from_pretrained(args.reader_path)
+        self.tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-large")
         self.device = device
         
         self.model.to(device)
@@ -73,19 +75,21 @@ class Reader:
                     {'title': title, 'paragraphs': [squad_example]})
 
         return squad_style_data
+    def to_list(tensor):
+        return tensor.detach().cpu().tolist()
 
     def predict_new(self,
                 retriever_output,
                 args):
         squad_style_data = self.convert_retriever_output(retriever_output)
-        tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-large")
+        
 
         e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
         dev_features, dev_dataset = squad_convert_examples_to_features(e, 
-                                                       tokenizer, 
+                                                       self.tokenizer, 
                                                        max_seq_length = 378, 
                                                        doc_stride = 128,
                                                        max_query_length = 64,
@@ -93,7 +97,48 @@ class Reader:
                                                        return_dataset = 'pt',
                                                        threads = 10
                                                        )
-        
+        eval_sampler = SequentialSampler(dev_dataset)
+        eval_dataloader = DataLoader(dev_dataset, sampler=eval_sampler, batch_size=12)
+        all_results = []
+        for batch in tqdm(eval_dataloader, desc="Evaluating"):
+            self.model.eval()
+            batch = tuple(t.to(self.device) for t in batch)
+            with torch.no_grad():
+                inputs = {
+                    "input_ids": batch[0],
+                    "attention_mask": batch[1],
+                    "token_type_ids": batch[2],
+                }
+                del inputs["token_type_ids"]
+                example_indices = batch[3]
+                outputs = self.model(**inputs)
+            for i, example_index in enumerate(example_indices):
+                eval_feature = dev_features[example_index.item()]
+                unique_id = int(eval_feature.unique_id)
+    #             for output in outputs:
+    #                 print(output)
+                output = [self.to_list(output[i]) for output in outputs]
+    #             output = [to_list(output) for output in outputs]
+                if len(output) >= 5:
+                    start_logits = output[0]
+                    start_top_index = output[1]
+                    end_logits = output[2]
+                    end_top_index = output[3]
+                    cls_logits = output[4]
+
+                    result = SquadResult(
+                        unique_id,
+                        start_logits,
+                        end_logits,
+                        start_top_index=start_top_index,
+                        end_top_index=end_top_index,
+                        cls_logits=cls_logits,
+                    )
+                else:
+                    start_logits, end_logits = output
+                    result = SquadResult(unique_id, start_logits, end_logits)
+                all_results.append(result)
+        print(all_results)
 
     def predict(self,
                 retriever_output,
@@ -101,7 +146,7 @@ class Reader:
 
         squad_style_data = self.convert_retriever_output(retriever_output)
 
-        print("CCCCCCCCCCCCCCCCSSSSSSSSSSSSSSS",squad_style_data)
+        # print("CCCCCCCCCCCCCCCCSSSSSSSSSSSSSSS",squad_style_data)
 
         e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
                                              is_training=False,
