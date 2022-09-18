@@ -112,6 +112,7 @@ class Reader:
                 del inputs["token_type_ids"]
                 example_indices = batch[3]
                 outputs = self.model(**inputs)
+            print('VVVVVVVVV', outputs)
             for i, example_index in enumerate(example_indices):
                 eval_feature = dev_features[example_index.item()]
                 unique_id = int(eval_feature.unique_id)
