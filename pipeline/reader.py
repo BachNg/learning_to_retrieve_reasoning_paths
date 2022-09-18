@@ -114,9 +114,9 @@ class Reader:
                 start_logits = batch_start_logits[i].detach().cpu().tolist()
                 end_logits = batch_end_logits[i].detach().cpu().tolist()
                 switch_logits = batch_switch_logits[i].detach().cpu().tolist()
-                print('aaaaaaaaaaaaaaa', start_logits)
-                print('bbbbbbbbbbb', end_logits)
-                print('sssssssss', switch_logits)
+                # print('aaaaaaaaaaaaaaa', start_logits)
+                # print('bbbbbbbbbbb', end_logits)
+                # print('sssssssss', switch_logits)
                 eval_feature = features[f_offset+i]
                 unique_id = int(features[f_offset+i].unique_id)
                 all_results.append(RawResult(unique_id=unique_id,
