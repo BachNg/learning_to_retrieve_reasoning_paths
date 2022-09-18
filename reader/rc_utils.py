@@ -1132,13 +1132,13 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             q_id_to_answer_candidates[example.qas_id].append({
                 "answer": switch_answers(
                     possible_answers[1], nbest_json[0]["text"]),
-                "no_answer_probs": nbest_json[0]["no_answer_probs"],
+                "no_answer_probs": nbest_json[0]["no_answer_prob"],
                 "para_titles": para_titles})
         else:
             q_id_to_answer_candidates[example.qas_id].append({
                 "answer": switch_answers(
                     possible_answers[0], nbest_json[0]["text"]),
-                "no_answer_probs": nbest_json[0]["no_answer_probs"],
+                "no_answer_probs": nbest_json[0]["no_answer_prob"],
                 "para_titles": para_titles})
     print('mmmmmmmmmmmm',q_id_to_answer_candidates)
     for q_id, answers in q_id_to_answer_candidates.items():
