@@ -80,7 +80,7 @@ class TfidfRetriever:
             else:
                 pruned_para_dict = prune_top_k_paragraphs(
                     question, paras_dict, tfidf_vectorizer, pruning_l)
-
+                print('CCCCCCCCCCCCCCCC', pruned_para_dict)
                 # add top pruning_l paragraphs from the target article.
                 context.update(pruned_para_dict)
                 # add hyperlinked paragraphs of the top pruning_l paragraphs from the target article.
