@@ -955,7 +955,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     all_predictions = collections.OrderedDict()
 
     for (example_index, example) in enumerate(all_examples):
-        print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+        # print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
         features = example_index_to_features[example_index]
 
         prelim_predictions = []
@@ -971,7 +971,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             if no_masking is True:
                 feature_null_score = result.start_logits[0] + \
                     result.end_logits[0]
-                print("NULLLLLLLLLLL", feature_null_score)
+                # print("NULLLLLLLLLLL", feature_null_score)
                 if feature_null_score < score_null:
                     score_null = feature_null_score
                     min_null_feature_index = feature_index
@@ -1066,7 +1066,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     switch=np.argmax(result.switch_logits),
                     switch_logits=result.switch_logits
                 ))
-        print('NNNNN', score_null,nbest)
+        # print('NNNNN', score_null,nbest)
         # if we didn't include the empty option in the n-best, include it
         if no_masking is True:
             if "" not in seen_predictions:
@@ -1123,7 +1123,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         # if the n-best is high enough, pick up no answer.
         possible_answers = np.argsort(
             nbest_json[0]["switch_scores"])[::-1]
-        print('nnnnnnnnnnn', possible_answers)
+        # print('nnnnnnnnnnn', possible_answers)
         q_id_to_answer_candidates.setdefault(example.qas_id, [])
         if output_selected_paras is True:
             para_titles = nbest_json[0]["para_titles"]
@@ -1141,7 +1141,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     possible_answers[0], nbest_json[0]["text"]),
                 "no_answer_probs": nbest_json[0]["no_answer_prob"],
                 "para_titles": para_titles})
-    print('mmmmmmmmmmmm',q_id_to_answer_candidates)
+    # print('mmmmmmmmmmmm',q_id_to_answer_candidates)
     for q_id, answers in q_id_to_answer_candidates.items():
         no_answer_probs = [answer["no_answer_probs"]
                            for answer in answers]
@@ -1159,7 +1159,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     q_id_to_selected_para_lists, indent=4) + "\n")
     except:
         pass
-    print('dddddddddddddd', all_predictions)
+    # print('dddddddddddddd', all_predictions)
     return all_predictions, q_id_to_selected_para_lists
 
 def get_final_text(pred_text, orig_text, do_lower_case, verbose_logging=False):
