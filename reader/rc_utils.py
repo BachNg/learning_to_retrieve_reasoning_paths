@@ -950,7 +950,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
 
     _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
         "PrelimPrediction",
-        ["feature_index", "start_index", "end_index", "start_logit", "end_logit"])
+        ["feature_index", "start_index", "end_index", "start_logit", "end_logit", 'featurenull_score'])
 
     all_predictions = collections.OrderedDict()
 
@@ -962,6 +962,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         min_null_feature_index = 0  # the paragraph slice with min null score
         null_start_logit = 0  # the start logit at the slice with min null score
         null_end_logit = 0  # the end logit at the slice with min null score
+        feature_null_score=0
 
         for (feature_index, feature) in enumerate(features):
             result = unique_id_to_result[feature.unique_id]
@@ -1003,7 +1004,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                             start_index=start_index,
                             end_index=end_index,
                             start_logit=result.start_logits[start_index],
-                            end_logit=result.end_logits[end_index]))
+                            end_logit=result.end_logits[end_index], featurenull_score=feature_null_score))
         if no_masking is True:
             prelim_predictions.append(
                 _PrelimPrediction(
@@ -1011,12 +1012,13 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     start_index=0,
                     end_index=0,
                     start_logit=null_start_logit,
-                    end_logit=null_end_logit))
+                    end_logit=null_end_logit,
+                    featurenull_score=feature_null_score))
         prelim_predictions = sorted(
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
             reverse=True)
-        # print('CCCCCCCCCCCC', prelim_predictions)
+        print('CCCCCCCCCCCC', prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
         no_answer_logit = score_null
