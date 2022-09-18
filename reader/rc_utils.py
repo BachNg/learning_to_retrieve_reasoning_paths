@@ -1144,7 +1144,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     for q_id, answers in q_id_to_answer_candidates.items():
         no_answer_probs = [answer["no_answer_probs"]
                            for answer in answers]
-        min_no_ans_answers = np.argsort(no_answer_probs)[0]
+        min_no_ans_answers = np.argsort(no_answer_probs)[::-1][0]
         all_predictions[q_id] = answers[min_no_ans_answers]["answer"]
         if output_selected_paras is True:
             q_id_to_selected_para_lists[q_id] = answers[min_no_ans_answers]["para_titles"]
