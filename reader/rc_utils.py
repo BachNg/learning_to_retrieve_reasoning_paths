@@ -1016,7 +1016,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
             reverse=True)
-        print('CCCCCCCCCCCC', prelim_predictions)
+        # print('CCCCCCCCCCCC', prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
         no_answer_logit = result.switch_logits[1]
@@ -1064,6 +1064,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     switch=np.argmax(result.switch_logits),
                     switch_logits=result.switch_logits
                 ))
+        print('NNNNN', nbest)
         # if we didn't include the empty option in the n-best, include it
         if no_masking is True:
             if "" not in seen_predictions:
