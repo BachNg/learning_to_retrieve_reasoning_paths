@@ -303,12 +303,14 @@ class ODQAEval:
                     e = pickle.load(input_file)
                 tfidf_retrieval_output = json.load(e)
             else:
-                tfidf_retrieval_output = self.retrieve(eval_questions)
+                tfidf_retrieval_output = self.retrieve(eval_questions[0:1])
                 with open('/content/tfidf_retrieval_output.pkl', 'wb') as f:
                     pickle.dump(tfidf_retrieval_output, f)
             # save_tfidf = torch.save({"tdidf": tfidf_retrieval_output}, '/content/tfidf_retrieval_output.pt')
+            print('FFFFFFFFFFFFFFFFFF', tfidf_retrieval_output)
             selector_output = self.select(tfidf_retrieval_output)
-        
+
+            print('UUUUUUUUUUUUUUU', selector_output)
         # read and extract answers from reasoning paths
         reader_output, titles = self.read(selector_output)
         
