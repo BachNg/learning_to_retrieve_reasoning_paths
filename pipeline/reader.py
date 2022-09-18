@@ -112,13 +112,13 @@ class Reader:
                 del inputs["token_type_ids"]
                 example_indices = batch[3]
                 outputs = self.model(**inputs)
-            # print('VVVVVVVVV', outputs)
+
             for i, example_index in enumerate(example_indices):
                 eval_feature = dev_features[example_index.item()]
                 unique_id = int(eval_feature.unique_id)
-    #             for output in outputs:
-    #                 print(output)
-                output = [self.to_list(output[i]) for output in outputs.to_tuple()]
+                for output in outputs:
+                    print("sssssssssssssssvvvvvvvvvv", output)
+                output = [self.to_list(output[i]) for output in outputs]
     #             output = [to_list(output) for output in outputs]
                 if len(output) >= 5:
                     start_logits = output[0]
