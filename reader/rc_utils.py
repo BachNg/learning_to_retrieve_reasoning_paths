@@ -1118,7 +1118,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                 output["para_titles"] = example.para_titles
             nbest_json.append(output)
         assert len(nbest_json) >= 1
-        print('vvvvvvvvvvvvv', nbest_json)
+        print('vvvvvvvvvvvvv', nbest_json[0]["switch_scores"])
         # if the n-best is high enough, pick up no answer.
         possible_answers = np.argsort(
             nbest_json[0]["switch_scores"])[::-1]
@@ -1132,13 +1132,13 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             q_id_to_answer_candidates[example.qas_id].append({
                 "answer": switch_answers(
                     possible_answers[1], nbest_json[0]["text"]),
-                "no_answer_probs": nbest_json[0]["switch_scores"][1],
+                "no_answer_probs": nbest_json[0]["no_answer_probs"],
                 "para_titles": para_titles})
         else:
             q_id_to_answer_candidates[example.qas_id].append({
                 "answer": switch_answers(
                     possible_answers[0], nbest_json[0]["text"]),
-                "no_answer_probs": nbest_json[0]["switch_scores"][1],
+                "no_answer_probs": nbest_json[0]["no_answer_probs"],
                 "para_titles": para_titles})
     print('mmmmmmmmmmmm',q_id_to_answer_candidates)
     for q_id, answers in q_id_to_answer_candidates.items():
