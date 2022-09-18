@@ -69,7 +69,7 @@ class TfidfRetriever:
                                     filter_dist_one=True, rank=True)
         para_dict_all = {}
         linked_titles_dict_all = {}
-        for doc_name in doc_names:
+        for top_doc, doc_name in enumerate(doc_names):
             paras_dict, linked_titles_dict = load_para_and_linked_titles_dict_from_tfidf_id(
                 doc_name, self.db)
             if len(paras_dict) == 0:
@@ -77,10 +77,16 @@ class TfidfRetriever:
             if prune_after_agg is True:
                 para_dict_all.update(paras_dict)
                 linked_titles_dict_all.update(linked_titles_dict)
+            elif top_doc==0:
+                pruned_para_dict = paras_dict
+                context.update(pruned_para_dict)
+                pruned_linked_titles = {k: v for k, v in linked_titles_dict.items() if k in pruned_para_dict}
+                assert len(pruned_para_dict) == len(pruned_linked_titles)
+                linked_titles.update(pruned_linked_titles)
             else:
                 pruned_para_dict = prune_top_k_paragraphs(
                     question, paras_dict, tfidf_vectorizer, pruning_l)
-                print('CCCCCCCCCCCCCCCC', pruned_para_dict)
+                # print('CCCCCCCCCCCCCCCC', pruned_para_dict)
                 # add top pruning_l paragraphs from the target article.
                 context.update(pruned_para_dict)
                 # add hyperlinked paragraphs of the top pruning_l paragraphs from the target article.
