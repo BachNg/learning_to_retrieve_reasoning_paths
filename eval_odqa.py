@@ -307,7 +307,7 @@ class ODQAEval:
                 with open('/content/tfidf_retrieval_output.pkl', 'wb') as f:
                     pickle.dump(tfidf_retrieval_output, f)
             # save_tfidf = torch.save({"tdidf": tfidf_retrieval_output}, '/content/tfidf_retrieval_output.pt')
-            print('FFFFFFFFFFFFFFFFFF', tfidf_retrieval_output)
+            # print('FFFFFFFFFFFFFFFFFF', tfidf_retrieval_output)
             selector_output = self.select(tfidf_retrieval_output)
 
             print('UUUUUUUUUUUUUUU', selector_output)

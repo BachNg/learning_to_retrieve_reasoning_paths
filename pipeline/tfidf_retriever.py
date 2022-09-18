@@ -139,6 +139,7 @@ class TfidfRetriever:
 
         tfidf_limit, pruning_l, prune_after_agg = args.tfidf_limit, args.pruning_l, args.prune_after_agg
         doc_names, _ = self.ranker.closest_docs(question, k=tfidf_limit)
+        print('FFFFFFFFFFFFFFF', doc_names)
         context, hyper_linked_titles = self.load_sampled_para_text_and_linked_titles(
             doc_names, question, pruning_l, prune_after_agg)
         
