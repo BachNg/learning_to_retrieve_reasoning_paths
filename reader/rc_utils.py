@@ -950,7 +950,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
 
     _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
         "PrelimPrediction",
-        ["feature_index", "start_index", "end_index", "start_logit", "end_logit", 'featurenull_score'])
+        ["feature_index", "start_index", "end_index", "start_logit", "end_logit"])
 
     all_predictions = collections.OrderedDict()
 
@@ -962,7 +962,6 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         min_null_feature_index = 0  # the paragraph slice with min null score
         null_start_logit = 0  # the start logit at the slice with min null score
         null_end_logit = 0  # the end logit at the slice with min null score
-        feature_null_score=0
 
         for (feature_index, feature) in enumerate(features):
             result = unique_id_to_result[feature.unique_id]
@@ -971,7 +970,6 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             if no_masking is True:
                 feature_null_score = result.start_logits[0] + \
                     result.end_logits[0]
-                print('RRRRRRRRRRRRRRR',feature_null_score)
                 if feature_null_score < score_null:
                     score_null = feature_null_score
                     min_null_feature_index = feature_index
@@ -1005,7 +1003,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                             start_index=start_index,
                             end_index=end_index,
                             start_logit=result.start_logits[start_index],
-                            end_logit=result.end_logits[end_index], featurenull_score=feature_null_score))
+                            end_logit=result.end_logits[end_index]))
         if no_masking is True:
             prelim_predictions.append(
                 _PrelimPrediction(
@@ -1013,8 +1011,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     start_index=0,
                     end_index=0,
                     start_logit=null_start_logit,
-                    end_logit=null_end_logit,
-                    featurenull_score=feature_null_score))
+                    end_logit=null_end_logit))
         prelim_predictions = sorted(
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
@@ -1147,7 +1144,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     for q_id, answers in q_id_to_answer_candidates.items():
         no_answer_probs = [answer["no_answer_probs"]
                            for answer in answers]
-        min_no_ans_answers = np.argsort(no_answer_probs)[::-1][0]
+        min_no_ans_answers = np.argsort(no_answer_probs)[0]
         all_predictions[q_id] = answers[min_no_ans_answers]["answer"]
         if output_selected_paras is True:
             q_id_to_selected_para_lists[q_id] = answers[min_no_ans_answers]["para_titles"]
