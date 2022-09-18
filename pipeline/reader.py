@@ -88,6 +88,7 @@ class Reader:
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
+
         dev_features, dev_dataset = squad_convert_examples_to_features(e, 
                                                        self.tokenizer, 
                                                        max_seq_length = 378, 
@@ -117,7 +118,7 @@ class Reader:
                 eval_feature = dev_features[example_index.item()]
                 unique_id = int(eval_feature.unique_id)
                 for output in outputs:
-                    print("sssssssssssssssvvvvvvvvvv", output)
+                    print("sssssssssssssssvvvvvvvvvv", output[i])
                 output = [self.to_list(output[i]) for output in outputs]
     #             output = [to_list(output) for output in outputs]
                 if len(output) >= 5:
