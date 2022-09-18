@@ -2,6 +2,9 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import pairwise_distances
 from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+from pyvi.ViTokenizer import tokenize
+
 
 
 class TopTfIdf():
@@ -9,6 +12,7 @@ class TopTfIdf():
         self.rank = rank
         self.n_to_select = n_to_select
         self.filter_dist_one = filter_dist_one
+        self.sbert = SentenceTransformer('VoVanPhuc/sup-SimCSE-VietNamese-phobert-base', device='cuda')
 
     def prune(self, question, paragraphs, return_scores=False):
         if not self.filter_dist_one and len(paragraphs) == 1:
@@ -19,12 +23,14 @@ class TopTfIdf():
         text = []
         for para in paragraphs:
             text.append(para)
-        try:
-            para_features = tfidf.fit_transform(text)
-        except ValueError:
-            return []
-        # question should be tokenized beforehand
-        q_features = tfidf.transform([question])
+        # try:
+        #     para_features = tfidf.fit_transform(text)
+        # except ValueError:
+        #     return []
+        # # question should be tokenized beforehand
+        # q_features = tfidf.transform([question])
+        q_features = self.sbert.encode([tokenize(question)])
+        para_features = self.sbert.encode([tokenize(doc) for doc in text])
         dists = cosine_similarity(q_features, para_features, "cosine").ravel()
         # in case of ties, use the earlier paragraph
         sorted_ix = np.argsort(dists)[::-1]

@@ -21,3 +21,4 @@ ujson
 unicodecsv
 urllib3
 pyvi
+sentence-transformers
