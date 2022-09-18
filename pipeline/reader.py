@@ -5,6 +5,7 @@ from transformers import XLMRobertaForQuestionAnswering, XLMRobertaTokenizer
 from transformers.data.metrics.squad_metrics import compute_predictions_log_probs, compute_predictions_logits, squad_evaluate
 from transformers.data.processors.squad import SquadResult, SquadV1Processor, SquadV2Processor
 from transformers.data.processors.squad import squad_convert_examples_to_features
+import os
 
 from reader.modeling_reader import BertForQuestionAnsweringConfidence
 from reader.rc_utils import read_squad_style_hotpot_examples, \
@@ -139,7 +140,25 @@ class Reader:
                     start_logits, end_logits = output
                     result = SquadResult(unique_id, start_logits, end_logits)
                 all_results.append(result)
-        print(all_results)
+        output_prediction_file = os.path.join("./", "predictions_{}.json".format(""))
+        output_nbest_file = os.path.join("./", "nbest_predictions_{}.json".format(""))
+        output_null_log_odds_file = os.path.join("./", "null_odds_{}.json".format(""))
+        predictions = compute_predictions_logits(
+                e,
+                dev_features,
+                all_results,
+                20,
+                300,
+                False,
+                output_prediction_file,
+                output_nbest_file,
+                output_null_log_odds_file,
+                True,
+                False,
+                0.0,
+                self.tokenizer,
+            )
+        return predictions, {}
 
     def predict(self,
                 retriever_output,

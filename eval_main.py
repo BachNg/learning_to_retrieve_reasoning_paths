@@ -23,9 +23,9 @@ def main():
     else:
         tfidf_retrieval_output, selector_output, reader_output = odqa.eval()
         # eval the performance; based on F1 & EM. 
-        # results = evaluate(odqa.args.eval_file_path, reader_output)
+        results = evaluate(odqa.args.eval_file_path, reader_output)
     
-        # print("EM :{0}, F1: {1}".format(results['exact_match'], results['f1']))
+        print("EM :{0}, F1: {1}".format(results['exact_match'], results['f1']))
 
     # Save the intermediate results.
     if odqa.args.tfidf_results_save_path is not None:
