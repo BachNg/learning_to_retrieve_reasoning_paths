@@ -971,6 +971,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             if no_masking is True:
                 feature_null_score = result.start_logits[0] + \
                     result.end_logits[0]
+                print('RRRRRRRRRRRRRRR',feature_null_score)
                 if feature_null_score < score_null:
                     score_null = feature_null_score
                     min_null_feature_index = feature_index
@@ -1018,7 +1019,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
             reverse=True)
-        print('CCCCCCCCCCCC', prelim_predictions)
+        # print('CCCCCCCCCCCC', prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
         no_answer_logit = score_null
