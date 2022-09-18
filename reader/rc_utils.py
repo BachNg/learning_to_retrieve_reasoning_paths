@@ -955,6 +955,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     all_predictions = collections.OrderedDict()
 
     for (example_index, example) in enumerate(all_examples):
+        print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
         features = example_index_to_features[example_index]
 
         prelim_predictions = []
@@ -970,6 +971,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             if no_masking is True:
                 feature_null_score = result.start_logits[0] + \
                     result.end_logits[0]
+                print("NULLLLLLLLLLL", feature_null_score)
                 if feature_null_score < score_null:
                     score_null = feature_null_score
                     min_null_feature_index = feature_index

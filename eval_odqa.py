@@ -310,7 +310,7 @@ class ODQAEval:
             # print('FFFFFFFFFFFFFFFFFF', tfidf_retrieval_output)
             selector_output = self.select(tfidf_retrieval_output)
 
-            print('UUUUUUUUUUUUUUU', selector_output)
+            # print('UUUUUUUUUUUUUUU', selector_output)
         # read and extract answers from reasoning paths
         reader_output, titles = self.read(selector_output)
         
