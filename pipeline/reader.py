@@ -146,22 +146,22 @@ class Reader:
         output_prediction_file = os.path.join("./", "predictions_{}.json".format(""))
         output_nbest_file = os.path.join("./", "nbest_predictions_{}.json".format(""))
         output_null_log_odds_file = os.path.join("./", "null_odds_{}.json".format(""))
-        predictions = compute_predictions_logits(
-                e,
-                dev_features,
-                all_results,
-                20,
-                300,
-                False,
-                output_prediction_file,
-                output_nbest_file,
-                output_null_log_odds_file,
-                True,
-                True,
-                0.0,
-                self.tokenizer,
-            )
-        print('KKKKKKKKKKKKKKK', predictions)
+        # predictions = compute_predictions_logits(
+        #         e,
+        #         dev_features,
+        #         all_results,
+        #         20,
+        #         300,
+        #         False,
+        #         output_prediction_file,
+        #         output_nbest_file,
+        #         output_null_log_odds_file,
+        #         True,
+        #         True,
+        #         0.0,
+        #         self.tokenizer,
+        #     )
+        # print('KKKKKKKKKKKKKKK', predictions)
         return write_predictions_yes_no_beam(e, dev_features, all_results,
                                              args.n_best_size, args.max_answer_length,
                                              args.do_lower_case, None,
