@@ -263,6 +263,7 @@ def load_para_and_linked_titles_dict_from_tfidf_id(tfidf_id, db):
 
 def prune_top_k_paragraphs(question_text, paragraphs, tfidf_vectorizer, pruning_l=10):
     para_titles, para_text = list(paragraphs.keys()), list(paragraphs.values())
+    print('fxxxxxxxxxxxxxx', para_titles)
     # prune top l paragraphs using the question as query to reduce the search space.
     top_tfidf_para_indices = tfidf_vectorizer.prune(
         question_text, para_text)[:pruning_l]
