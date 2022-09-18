@@ -1157,7 +1157,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     q_id_to_selected_para_lists, indent=4) + "\n")
     except:
         pass
-
+    print('dddddddddddddd', all_predictions)
     return all_predictions, q_id_to_selected_para_lists
 
 def get_final_text(pred_text, orig_text, do_lower_case, verbose_logging=False):
