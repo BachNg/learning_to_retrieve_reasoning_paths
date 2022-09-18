@@ -82,7 +82,7 @@ class Reader:
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
-
+        print("KKKKKKKKKKKKKKFFFFFFFFFFFFFFFFFF",e)
         features = convert_examples_to_features(
             examples=e,
             tokenizer=self.tokenizer,
