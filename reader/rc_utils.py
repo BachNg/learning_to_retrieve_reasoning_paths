@@ -1118,11 +1118,11 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                 output["para_titles"] = example.para_titles
             nbest_json.append(output)
         assert len(nbest_json) >= 1
-        print('vvvvvvvvvvvvv', nbest_json)
+        # print('vvvvvvvvvvvvv', nbest_json)
         # if the n-best is high enough, pick up no answer.
         possible_answers = np.argsort(
             nbest_json[0]["switch_scores"])[::-1]
-
+        print('nnnnnnnnnnn', possible_answers)
         q_id_to_answer_candidates.setdefault(example.qas_id, [])
         if output_selected_paras is True:
             para_titles = nbest_json[0]["para_titles"]
