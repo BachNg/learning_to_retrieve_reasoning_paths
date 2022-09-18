@@ -1019,7 +1019,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         # print('CCCCCCCCCCCC', prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
-        # no_answer_logit = result.switch_logits[1]
+        no_answer_logit = result.switch_logits[1]
 
         seen_predictions = {}
         nbest = []
@@ -1060,9 +1060,9 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     text=final_text,
                     start_logit=pred.start_logit,
                     end_logit=pred.end_logit,
-                    no_answer_logit=None,
-                    switch=None,
-                    switch_logits=None
+                    no_answer_logit=no_answer_logit,
+                    switch=np.argmax(result.switch_logits),
+                    switch_logits=result.switch_logits
                 ))
         print('NNNNN', nbest)
         # if we didn't include the empty option in the n-best, include it
@@ -1073,9 +1073,9 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                         text="",
                         start_logit=null_start_logit,
                         end_logit=null_end_logit,
-                        no_answer_logit=None,
-                        switch=None,
-                        switch_logits=None
+                        no_answer_logit=no_answer_logit,
+                        switch=np.argmax(result.switch_logits),
+                        switch_logits=result.switch_logits
                     ))
 
             # In very rare edge cases we could only have single null prediction.
@@ -1158,7 +1158,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     q_id_to_selected_para_lists, indent=4) + "\n")
     except:
         pass
-    # print('dddddddddddddd', all_predictions)
+    print('dddddddddddddd', all_predictions)
     return all_predictions, q_id_to_selected_para_lists
 
 def get_final_text(pred_text, orig_text, do_lower_case, verbose_logging=False):
