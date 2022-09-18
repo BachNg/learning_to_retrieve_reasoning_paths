@@ -56,7 +56,7 @@ def evaluate(eval_file_path, predictions, quiet=False, multiple_gts=True):
     eval_data = read_jsonlines(eval_file_path)
     f1 = exact_match = total = 0
 
-    for qa in eval_data:
+    for qa in eval_data[:20]:
         q_id = qa['id']
         if str(q_id) not in predictions:
             print("q_id: {0} is missing.".format(q_id))
