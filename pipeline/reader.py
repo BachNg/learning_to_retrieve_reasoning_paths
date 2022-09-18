@@ -76,7 +76,7 @@ class Reader:
 
         squad_style_data = self.convert_retriever_output(retriever_output)
 
-        print("CCCCCCCCCCCCCCCCSSSSSSSSSSSSSSS",squad_style_data)
+        # print("CCCCCCCCCCCCCCCCSSSSSSSSSSSSSSS",squad_style_data)
 
         e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
                                              is_training=False,
@@ -91,7 +91,7 @@ class Reader:
             max_query_length=args.max_query_length,
             is_training=False,
             quiet = True)
-
+        print('jjjjjjjjjjjjjddddddddddddd', features)
         all_input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
         all_input_masks = torch.tensor([f.input_mask for f in features], dtype=torch.long)
         all_segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
@@ -121,7 +121,7 @@ class Reader:
                                              end_logits=end_logits,
                                              switch_logits=switch_logits))
             f_offset += input_ids.size(0)
-            
+        print('dddddddddddddssssssssssss', all_results)    
         return write_predictions_yes_no_beam(e, features, all_results,
                                              args.n_best_size, args.max_answer_length,
                                              args.do_lower_case, None,
