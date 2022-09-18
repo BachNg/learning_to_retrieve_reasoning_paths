@@ -1064,7 +1064,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     switch=np.argmax(result.switch_logits),
                     switch_logits=result.switch_logits
                 ))
-        print('NNNNN', nbest, score_null)
+        print('NNNNN', score_null, nbest)
         # if we didn't include the empty option in the n-best, include it
         if no_masking is True:
             if "" not in seen_predictions:
