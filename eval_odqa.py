@@ -265,7 +265,7 @@ class ODQAEval:
     def read(self, selector_output):
         # Reader
         reader = Reader(self.args, self.device)
-
+        print(selector_output)
         answers, titles  = reader.predict(selector_output, self.args)
         reader_output = {}
         print("reader")
@@ -303,7 +303,7 @@ class ODQAEval:
                     e = pickle.load(input_file)
                 tfidf_retrieval_output = json.load(e)
             else:
-                tfidf_retrieval_output = self.retrieve(eval_questions[:5000])
+                tfidf_retrieval_output = self.retrieve(eval_questions)
                 with open('/content/tfidf_retrieval_output.pkl', 'wb') as f:
                     pickle.dump(tfidf_retrieval_output, f)
             # save_tfidf = torch.save({"tdidf": tfidf_retrieval_output}, '/content/tfidf_retrieval_output.pt')
