@@ -1,6 +1,10 @@
 import torch
 
 from pytorch_pretrained_bert.tokenization import BertTokenizer
+from transformers import XLMRobertaForQuestionAnswering, XLMRobertaTokenizer
+from transformers.data.metrics.squad_metrics import compute_predictions_log_probs, compute_predictions_logits, squad_evaluate
+from transformers.data.processors.squad import SquadResult, SquadV1Processor, SquadV2Processor
+from transformers.data.processors.squad import squad_convert_examples_to_features
 
 from reader.modeling_reader import BertForQuestionAnsweringConfidence
 from reader.rc_utils import read_squad_style_hotpot_examples, \
@@ -69,6 +73,22 @@ class Reader:
                     {'title': title, 'paragraphs': [squad_example]})
 
         return squad_style_data
+
+    def predict_new(self,
+                retriever_output,
+                args):
+        squad_style_data = self.convert_retriever_output(retriever_output)
+        tokenizer = XLMRobertaTokenizer.from_pretrained("xlm-roberta-large")
+        dev_features, dev_dataset = squad_convert_examples_to_features(squad_style_data, 
+                                                       tokenizer, 
+                                                       max_seq_length = 378, 
+                                                       doc_stride = 128,
+                                                       max_query_length = 64,
+                                                       is_training = False,
+                                                       return_dataset = 'pt',
+                                                       threads = 10
+                                                       )
+        
 
     def predict(self,
                 retriever_output,

@@ -9,6 +9,7 @@ pathlib2
 prettytable
 pytorch-pretrained-bert==0.6.2
 pytorch-transformers==1.2.0
+transformers==3.5.1
 regex
 scipy
 scikit-learn
