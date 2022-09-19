@@ -1068,17 +1068,17 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                 ))
         print('NNNNN', nbest)
         # if we didn't include the empty option in the n-best, include it
-        if no_masking is True:
-            if "" not in seen_predictions:
-                nbest.append(
-                    _NbestPrediction(
-                        text="",
-                        start_logit=null_start_logit,
-                        end_logit=null_end_logit,
-                        no_answer_logit=no_answer_logit,
-                        switch=np.argmax(result.switch_logits),
-                        switch_logits=result.switch_logits
-                    ))
+        # if no_masking is True:
+        #     if "" not in seen_predictions:
+        #         nbest.append(
+        #             _NbestPrediction(
+        #                 text="",
+        #                 start_logit=null_start_logit,
+        #                 end_logit=null_end_logit,
+        #                 no_answer_logit=no_answer_logit,
+        #                 switch=np.argmax(result.switch_logits),
+        #                 switch_logits=result.switch_logits
+        #             ))
 
             # In very rare edge cases we could only have single null prediction.
             # So we just create a nonce prediction in this case to avoid
