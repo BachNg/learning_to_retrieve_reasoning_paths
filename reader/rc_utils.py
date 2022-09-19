@@ -1128,7 +1128,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             if output_selected_paras is True:
                 output["para_titles"] = example.para_titles
             nbest_json.append(output)
-        print('XXXXXXXXXZZZZZZ', example.qas_id, example.para_titles,[(i['text'][:10],i['probability'], i['no_answer_prob'])  for i in nbest_json])
+        # print('XXXXXXXXXZZZZZZ', example.qas_id, example.para_titles,[(i['text'][:10],i['probability'], i['no_answer_prob'])  for i in nbest_json])
         assert len(nbest_json) >= 1
         # if the n-best is high enough, pick up no answer.
         possible_answers = np.argsort(
@@ -1152,7 +1152,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                 "no_answer_probs": nbest_json[0]["no_answer_prob"],
                 "para_titles": para_titles})
                 
-    print('mmmmmmmmmmmm',len(q_id_to_answer_candidates[example.qas_id]))
+    # print('mmmmmmmmmmmm',len(q_id_to_answer_candidates[example.qas_id]))
 
     for q_id, answers in q_id_to_answer_candidates.items():
         no_answer_probs = [answer["no_answer_probs"]
