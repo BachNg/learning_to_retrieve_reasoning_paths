@@ -162,7 +162,7 @@ class Reader:
         #         self.tokenizer,
         #     )
         # print('KKKKKKKKKKKKKKK', predictions)
-        return write_predictions_yes_no_beam(e, dev_features, all_results,
+        return write_predictions_yes_no_beam(dev_dataset, dev_features, all_results,
                                              args.n_best_size, args.max_answer_length,
                                              args.do_lower_case, None,
                                              None, None, False,
