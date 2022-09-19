@@ -950,7 +950,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     # print('VVVVVVVVVVVVVVVVDDDDDDDDDDDD', unique_id_to_result.keys())
     _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
         "PrelimPrediction",
-        ["feature_index", "start_index", "end_index", "start_logit", "end_logit"])
+        ["feature_index", "start_index", "end_index", "start_logit", "end_logit", 'no_answer_logit'])
 
     all_predictions = collections.OrderedDict()
 
@@ -1005,7 +1005,8 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                             start_index=start_index,
                             end_index=end_index,
                             start_logit=result.start_logits[start_index],
-                            end_logit=result.end_logits[end_index]))
+                            end_logit=result.end_logits[end_index],
+                            no_answer_logit = result.start_logits[0] + result.end_logits[0]))
         if no_masking is True:
             prelim_predictions.append(
                 _PrelimPrediction(
@@ -1013,7 +1014,9 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     start_index=0,
                     end_index=0,
                     start_logit=null_start_logit,
-                    end_logit=null_end_logit))
+                    end_logit=null_end_logit,
+                    no_answer_logit = null_start_logit + null_end_logit
+                    ))
         prelim_predictions = sorted(
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
@@ -1021,7 +1024,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         # print('CCCCCCCCCCCC',  example.qas_id,example.para_titles, prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
-        no_answer_logit = score_null
+        # no_answer_logit = score_null
 
         seen_predictions = {}
         nbest = []
@@ -1062,23 +1065,23 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     text=final_text,
                     start_logit=pred.start_logit,
                     end_logit=pred.end_logit,
-                    no_answer_logit=no_answer_logit,
+                    no_answer_logit=pred.no_answer_logit,
                     switch=np.argmax(result.switch_logits),
                     switch_logits=result.switch_logits
                 ))
-        print('NNNNN', nbest)
+        # print('NNNNN', nbest)
         # if we didn't include the empty option in the n-best, include it
-        # if no_masking is True:
-        #     if "" not in seen_predictions:
-        #         nbest.append(
-        #             _NbestPrediction(
-        #                 text="",
-        #                 start_logit=null_start_logit,
-        #                 end_logit=null_end_logit,
-        #                 no_answer_logit=no_answer_logit,
-        #                 switch=np.argmax(result.switch_logits),
-        #                 switch_logits=result.switch_logits
-        #             ))
+        if no_masking is True:
+            if "" not in seen_predictions:
+                nbest.append(
+                    _NbestPrediction(
+                        text="",
+                        start_logit=null_start_logit,
+                        end_logit=null_end_logit,
+                        no_answer_logit=null_start_logit + null_end_logit,
+                        switch=np.argmax(result.switch_logits),
+                        switch_logits=result.switch_logits
+                    ))
 
             # In very rare edge cases we could only have single null prediction.
             # So we just create a nonce prediction in this case to avoid
@@ -1120,7 +1123,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             if output_selected_paras is True:
                 output["para_titles"] = example.para_titles
             nbest_json.append(output)
-        print('XXXXXXXXXZZZZZZ', len(nbest_json),nbest_json)
+        print('XXXXXXXXXZZZZZZ', [i['para_titles'],i['text'],i['probability'], i['no_answer_prob']  for i in nbest_json])
         assert len(nbest_json) >= 1
         # if the n-best is high enough, pick up no answer.
         possible_answers = np.argsort(
