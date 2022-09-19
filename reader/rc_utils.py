@@ -947,7 +947,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     q_id_to_selected_para_lists = {}
     for result in all_results:
         unique_id_to_result[result.unique_id] = result
-
+    print('VVVVVVVVVVVVVVVVDDDDDDDDDDDD', unique_id_to_result)
     _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
         "PrelimPrediction",
         ["feature_index", "start_index", "end_index", "start_logit", "end_logit"])
@@ -957,7 +957,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     for (example_index, example) in enumerate(all_examples):
 
         features = example_index_to_features[example_index]
-        print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE", len(features), example_index)
+        # print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE", len(features), example_index)
         prelim_predictions = []
         score_null = 1000000  # large and positive
         min_null_feature_index = 0  # the paragraph slice with min null score
