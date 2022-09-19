@@ -1018,7 +1018,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             prelim_predictions,
             key=lambda x: (x.start_logit + x.end_logit),
             reverse=True)
-        print('CCCCCCCCCCCC', len(prelim_predictions))
+        print('CCCCCCCCCCCC', prelim_predictions)
         _NbestPrediction = collections.namedtuple(  # pylint: disable=invalid-name
             "NbestPrediction", ["text", "start_logit", "end_logit", "no_answer_logit", "switch", "switch_logits"])
         no_answer_logit = score_null
@@ -1101,7 +1101,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         assert len(nbest) >= 1
 
         total_scores = []
-        print("VAAAAAAAAASSSSSSSS", len(nbest))
+        # print("VAAAAAAAAASSSSSSSS", len(nbest))
         for entry in nbest:
             total_scores.append(entry.start_logit + entry.end_logit)
 
