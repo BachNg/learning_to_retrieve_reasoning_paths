@@ -1151,7 +1151,9 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
                     possible_answers[0], nbest_json[0]["text"]),
                 "no_answer_probs": nbest_json[0]["no_answer_prob"],
                 "para_titles": para_titles})
+                
     print('mmmmmmmmmmmm',len(q_id_to_answer_candidates[example.qas_id]))
+
     for q_id, answers in q_id_to_answer_candidates.items():
         no_answer_probs = [answer["no_answer_probs"]
                            for answer in answers]
