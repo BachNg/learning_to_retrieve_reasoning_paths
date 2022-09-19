@@ -947,7 +947,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     q_id_to_selected_para_lists = {}
     for result in all_results:
         unique_id_to_result[result.unique_id] = result
-    # print('VVVVVVVVVVVVVVVVDDDDDDDDDDDD', unique_id_to_result)
+    print('VVVVVVVVVVVVVVVVDDDDDDDDDDDD', unique_id_to_result.keys())
     _PrelimPrediction = collections.namedtuple(  # pylint: disable=invalid-name
         "PrelimPrediction",
         ["feature_index", "start_index", "end_index", "start_logit", "end_logit"])
