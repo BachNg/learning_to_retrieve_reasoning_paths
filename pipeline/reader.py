@@ -148,7 +148,7 @@ class Reader:
                                              args.n_best_size, args.max_answer_length,
                                              args.do_lower_case, None,
                                              None, None, False,
-                                             False, None,no_masking=False,
+                                             False, None,no_masking=True,
                                              output_selected_paras=True,
                                              quiet = True)
 
