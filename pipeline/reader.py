@@ -89,7 +89,7 @@ class Reader:
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
-        print("KKKKKKKKKKKKKKFFFFFFFFFFFFFFFFFF",len(e))
+                                             
         dev_features, dev_dataset = squad_convert_examples_to_features(e, 
                                                        self.tokenizer, 
                                                        max_seq_length = 378, 
