@@ -1104,11 +1104,15 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
         assert len(nbest) >= 1
 
         total_scores = []
+        null_scores = []
         # print("VAAAAAAAAASSSSSSSS", len(nbest))
         for entry in nbest:
             total_scores.append(entry.start_logit + entry.end_logit)
 
+        for entry in nbest:
+            null_scores.append(entry.no_answer_logit)
         probs = _compute_softmax(total_scores)
+        null_scores = _compute_softmax(null_scores)
 
         nbest_json = []
         for (i, entry) in enumerate(nbest):
@@ -1117,7 +1121,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
             output["probability"] = probs[i]
             output["start_logit"] = entry.start_logit
             output["end_logit"] = entry.end_logit
-            output["no_answer_prob"] = entry.no_answer_logit
+            output["no_answer_prob"] = null_scores[i]
             output["switch"] = entry.switch
             output["switch_scores"] = entry.switch_logits
             if output_selected_paras is True:
