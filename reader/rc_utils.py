@@ -941,7 +941,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     example_index_to_features = collections.defaultdict(list)
     for feature in all_features:
         example_index_to_features[feature.example_index].append(feature)
-
+    print('EXAMPLE_2_FEATUREEEEEEEEEEEE', example_index_to_features)
     unique_id_to_result = {}
     q_id_to_answer_candidates = {}
     q_id_to_selected_para_lists = {}
@@ -955,7 +955,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     all_predictions = collections.OrderedDict()
 
     for (example_index, example) in enumerate(all_examples):
-        # print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+        print("SAMPLEEEEEEEEEEEEEEEEEEEEEEEEEEEE", len(all_examples), example_index)
         features = example_index_to_features[example_index]
 
         prelim_predictions = []
