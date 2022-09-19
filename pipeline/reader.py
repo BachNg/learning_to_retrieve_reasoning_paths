@@ -85,11 +85,11 @@ class Reader:
         squad_style_data = self.convert_retriever_output(retriever_output)
         
 
-        e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
-                                             is_training=False,
-                                             version_2_with_negative=False,
-                                             store_path_prob=False)
-        dev_features, dev_dataset = squad_convert_examples_to_features(e, 
+        # e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
+        #                                      is_training=False,
+        #                                      version_2_with_negative=False,
+        #                                      store_path_prob=False)
+        dev_features, dev_dataset = squad_convert_examples_to_features(squad_style_data, 
                                                        self.tokenizer, 
                                                        max_seq_length = 378, 
                                                        doc_stride = 128,
@@ -162,7 +162,7 @@ class Reader:
         #         self.tokenizer,
         #     )
         # print('KKKKKKKKKKKKKKK', predictions)
-        return write_predictions_yes_no_beam(dev_dataset, dev_features, all_results,
+        return write_predictions_yes_no_beam(e, dev_features, all_results,
                                              args.n_best_size, args.max_answer_length,
                                              args.do_lower_case, None,
                                              None, None, False,
