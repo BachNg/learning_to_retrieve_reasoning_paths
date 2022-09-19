@@ -85,11 +85,12 @@ class Reader:
         squad_style_data = self.convert_retriever_output(retriever_output)
         
 
-        # e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
-        #                                      is_training=False,
-        #                                      version_2_with_negative=False,
-        #                                      store_path_prob=False)
-        dev_features, dev_dataset = squad_convert_examples_to_features(squad_style_data, 
+        e = read_squad_style_hotpot_examples(squad_style_hotpot_dev=squad_style_data,
+                                             is_training=False,
+                                             version_2_with_negative=False,
+                                             store_path_prob=False)
+        
+        dev_features, dev_dataset = squad_convert_examples_to_features(e, 
                                                        self.tokenizer, 
                                                        max_seq_length = 378, 
                                                        doc_stride = 128,
@@ -182,7 +183,7 @@ class Reader:
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
-        # print("KKKKKKKKKKKKKKFFFFFFFFFFFFFFFFFF",e)
+        print("KKKKKKKKKKKKKKFFFFFFFFFFFFFFFFFF",len(e))
         features = convert_examples_to_features(
             examples=e,
             tokenizer=self.tokenizer,

@@ -941,7 +941,7 @@ def write_predictions_yes_no_beam(all_examples, all_features, all_results, n_bes
     example_index_to_features = collections.defaultdict(list)
     for feature in all_features:
         example_index_to_features[feature.example_index].append(feature)
-    print('EXAMPLE_2_FEATUREEEEEEEEEEEE', example_index_to_features)
+    print('EXAMPLE_2_FEATUREEEEEEEEEEEE', example_index_to_features[0])
     unique_id_to_result = {}
     q_id_to_answer_candidates = {}
     q_id_to_selected_para_lists = {}
