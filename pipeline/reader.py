@@ -89,7 +89,7 @@ class Reader:
                                              is_training=False,
                                              version_2_with_negative=False,
                                              store_path_prob=False)
-                                             
+
         dev_features, dev_dataset = squad_convert_examples_to_features(e, 
                                                        self.tokenizer, 
                                                        max_seq_length = 378, 
@@ -209,12 +209,12 @@ class Reader:
             input_masks = input_masks.to(self.device)
             segment_ids = segment_ids.to(self.device)
             with torch.no_grad():
-                batch_start_logits, batch_end_logits, batch_switch_logits = self.model(input_ids, segment_ids, input_masks)
+                batch_start_logits, batch_end_logits = self.model(input_ids, segment_ids, input_masks)
 
             for i in range(input_ids.size(0)):
                 start_logits = batch_start_logits[i].detach().cpu().tolist()
                 end_logits = batch_end_logits[i].detach().cpu().tolist()
-                switch_logits = batch_switch_logits[i].detach().cpu().tolist()
+                # switch_logits = batch_switch_logits[i].detach().cpu().tolist()
                 # print('aaaaaaaaaaaaaaa', start_logits)
                 # print('bbbbbbbbbbb', end_logits)
                 # print('sssssssss', switch_logits)
@@ -223,7 +223,7 @@ class Reader:
                 all_results.append(RawResult(unique_id=unique_id,
                                              start_logits=start_logits,
                                              end_logits=end_logits,
-                                             switch_logits=switch_logits))
+                                             switch_logits=[1.0, 0.0, 0.0, 0.0]))
             f_offset += input_ids.size(0)
             
         return write_predictions_yes_no_beam(e, features, all_results,

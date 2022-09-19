@@ -266,7 +266,7 @@ class ODQAEval:
         # Reader
         reader = Reader(self.args, self.device)
         # print('VVVVVVVVVVVSSSSSSSSSS',selector_output)
-        answers, titles  = reader.predict_new(selector_output, self.args)
+        answers, titles  = reader.predict(selector_output, self.args)
         reader_output = {}
         print("reader")
         print(len(answers))
