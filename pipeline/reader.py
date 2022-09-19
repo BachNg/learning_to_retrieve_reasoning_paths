@@ -209,11 +209,11 @@ class Reader:
             input_masks = input_masks.to(self.device)
             segment_ids = segment_ids.to(self.device)
             with torch.no_grad():
-                batch_start_logits, batch_end_logits = self.model(input_ids, segment_ids, input_masks)
+                outputs = self.model(input_ids, segment_ids, input_masks)
 
             for i in range(input_ids.size(0)):
-                start_logits = batch_start_logits[i].detach().cpu().tolist()
-                end_logits = batch_end_logits[i].detach().cpu().tolist()
+                output = [self.to_list(output[i]) for output in outputs]
+                start_logits, end_logits = output
                 # switch_logits = batch_switch_logits[i].detach().cpu().tolist()
                 # print('aaaaaaaaaaaaaaa', start_logits)
                 # print('bbbbbbbbbbb', end_logits)
